@@ -6,11 +6,488 @@
     <title>TurtleBot3 Presentation</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+    </style>
 </head>
 <body>
     <div id="root"></div>
-    <script type="text/babel" src="app.js"></script>
+    
+    <script type="text/babel" data-type="module">
+        const { useState } = React;
+        const { ChevronLeft, ChevronRight, Radio, MapPin, Users, Target, Lightbulb, AlertTriangle, CheckCircle } = lucide;
+
+        const Presentation = () => {
+          const [currentSlide, setCurrentSlide] = useState(0);
+
+          const slides = [
+            {
+              title: "Autonomous Mapping & User-Directed Navigation Robot",
+              icon: React.createElement(Radio, { className: "w-16 h-16 text-blue-500" }),
+              content: (
+                React.createElement('div', { className: "space-y-8" },
+                  React.createElement('div', { className: "bg-gradient-to-r from-blue-500 to-purple-600 text-white p-8 rounded-lg" },
+                    React.createElement('h2', { className: "text-4xl font-bold mb-4" }, "Project Overview"),
+                    React.createElement('p', { className: "text-xl" }, "Interactive Robotics Demonstration Platform")
+                  ),
+                  
+                  React.createElement('div', { className: "grid grid-cols-2 gap-6" },
+                    React.createElement('div', { className: "bg-white p-6 rounded-lg shadow-lg" },
+                      React.createElement('h3', { className: "text-2xl font-bold text-gray-800 mb-3" }, "Team Members"),
+                      React.createElement('p', { className: "text-gray-600 text-lg" }, "[Your Names]")
+                    ),
+                    
+                    React.createElement('div', { className: "bg-white p-6 rounded-lg shadow-lg" },
+                      React.createElement('h3', { className: "text-2xl font-bold text-gray-800 mb-3" }, "Robot Platform"),
+                      React.createElement('p', { className: "text-gray-600 text-lg font-semibold" }, "TurtleBot3 Burger"),
+                      React.createElement('ul', { className: "mt-3 space-y-1 text-gray-600" },
+                        React.createElement('li', null, "• Raspberry Pi 4"),
+                        React.createElement('li', null, "• OpenCR Controller"),
+                        React.createElement('li', null, "• LiDAR Sensor"),
+                        React.createElement('li', null, "• IMU")
+                      )
+                    )
+                  ),
+
+                  React.createElement('div', { className: "bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded" },
+                    React.createElement('h3', { className: "text-xl font-bold text-gray-800 mb-2" }, "Application Modes"),
+                    React.createElement('div', { className: "space-y-2 text-gray-700" },
+                      React.createElement('p', null,
+                        React.createElement('strong', null, "Mode 1:"), " Autonomous mapping and exploration"
+                      ),
+                      React.createElement('p', null,
+                        React.createElement('strong', null, "Mode 2:"), " Interactive navigation with user-selected destinations"
+                      )
+                    )
+                  )
+                )
+              )
+            },
+            {
+              title: "Purpose, Motivation & Target Application",
+              icon: React.createElement(Target, { className: "w-16 h-16 text-green-500" }),
+              content: (
+                React.createElement('div', { className: "space-y-6" },
+                  React.createElement('div', { className: "bg-green-50 border-2 border-green-500 p-6 rounded-lg" },
+                    React.createElement('h3', { className: "text-2xl font-bold text-green-800 mb-3" }, "Purpose"),
+                    React.createElement('p', { className: "text-lg text-gray-700" }, "Demonstrate autonomous mapping and interactive navigation for open-day visitors")
+                  ),
+
+                  React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-3 gap-4" },
+                    React.createElement('div', { className: "bg-white p-5 rounded-lg shadow-md" },
+                      React.createElement('div', { className: "text-blue-500 font-bold text-lg mb-2" }, "Autonomous Mode"),
+                      React.createElement('p', { className: "text-gray-600" }, "Draws attention visually with automated exploration")
+                    ),
+                    React.createElement('div', { className: "bg-white p-5 rounded-lg shadow-md" },
+                      React.createElement('div', { className: "text-purple-500 font-bold text-lg mb-2" }, "Interactive Mode"),
+                      React.createElement('p', { className: "text-gray-600" }, "Allows safe user control and engagement")
+                    ),
+                    React.createElement('div', { className: "bg-white p-5 rounded-lg shadow-md" },
+                      React.createElement('div', { className: "text-indigo-500 font-bold text-lg mb-2" }, "Live Experience"),
+                      React.createElement('p', { className: "text-gray-600" }, "Visitors experience real robotics concepts")
+                    )
+                  ),
+
+                  React.createElement('div', { className: "bg-gradient-to-r from-purple-100 to-pink-100 p-6 rounded-lg" },
+                    React.createElement('h3', { className: "text-xl font-bold text-gray-800 mb-3 flex items-center" },
+                      React.createElement(Users, { className: "w-6 h-6 mr-2" }),
+                      "Target Audience"
+                    ),
+                    React.createElement('div', { className: "grid grid-cols-3 gap-4 text-center" },
+                      React.createElement('div', { className: "bg-white p-4 rounded shadow" },
+                        React.createElement('p', { className: "font-semibold text-gray-800" }, "Children")
+                      ),
+                      React.createElement('div', { className: "bg-white p-4 rounded shadow" },
+                        React.createElement('p', { className: "font-semibold text-gray-800" }, "Parents")
+                      ),
+                      React.createElement('div', { className: "bg-white p-4 rounded shadow" },
+                        React.createElement('p', { className: "font-semibold text-gray-800" }, "Prospective Students")
+                      )
+                    )
+                  ),
+
+                  React.createElement('div', { className: "bg-blue-500 text-white p-6 rounded-lg" },
+                    React.createElement('h3', { className: "text-xl font-bold mb-2" }, "Success Criteria"),
+                    React.createElement('p', { className: "text-lg" }, "Visitors understand behavior, interact safely, and robot runs reliably")
+                  )
+                )
+              )
+            },
+            {
+              title: "Key Functions & Requirements",
+              icon: React.createElement(CheckCircle, { className: "w-16 h-16 text-indigo-500" }),
+              content: (
+                React.createElement('div', { className: "space-y-5" },
+                  React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-5" },
+                    React.createElement('div', { className: "bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-lg shadow-lg" },
+                      React.createElement('h3', { className: "text-2xl font-bold mb-3" }, "Mode 1: Autonomous Mapping"),
+                      React.createElement('ul', { className: "space-y-2" },
+                        React.createElement('li', null, "✓ Explores environment automatically"),
+                        React.createElement('li', null, "✓ Uses LiDAR, IMU, and wheel odometry"),
+                        React.createElement('li', null, "✓ Generates live 2D occupancy grid"),
+                        React.createElement('li', null, "✓ Avoids obstacles dynamically")
+                      )
+                    ),
+
+                    React.createElement('div', { className: "bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-lg shadow-lg" },
+                      React.createElement('h3', { className: "text-2xl font-bold mb-3" }, "Mode 2: Interactive Navigation"),
+                      React.createElement('ul', { className: "space-y-2" },
+                        React.createElement('li', null, "✓ User clicks destination on map"),
+                        React.createElement('li', null, "✓ Robot plans path and drives safely"),
+                        React.createElement('li', null, "✓ Map updates in real time"),
+                        React.createElement('li', null, "✓ Speed and collision limits ensure safety")
+                      )
+                    )
+                  ),
+
+                  React.createElement('div', { className: "bg-yellow-50 border-2 border-yellow-400 p-6 rounded-lg" },
+                    React.createElement('h3', { className: "text-2xl font-bold text-gray-800 mb-4" }, "High-Level Requirements"),
+                    React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-3" },
+                      React.createElement('div', { className: "flex items-start space-x-3" },
+                        React.createElement('div', { className: "w-2 h-2 bg-yellow-500 rounded-full mt-2" }),
+                        React.createElement('p', { className: "text-gray-700" }, "Generate and update map continuously")
+                      ),
+                      React.createElement('div', { className: "flex items-start space-x-3" },
+                        React.createElement('div', { className: "w-2 h-2 bg-yellow-500 rounded-full mt-2" }),
+                        React.createElement('p', { className: "text-gray-700" }, "Respond to user input <1 second")
+                      ),
+                      React.createElement('div', { className: "flex items-start space-x-3" },
+                        React.createElement('div', { className: "w-2 h-2 bg-yellow-500 rounded-full mt-2" }),
+                        React.createElement('p', { className: "text-gray-700" }, "Avoid obstacles reliably")
+                      ),
+                      React.createElement('div', { className: "flex items-start space-x-3" },
+                        React.createElement('div', { className: "w-2 h-2 bg-yellow-500 rounded-full mt-2" }),
+                        React.createElement('p', { className: "text-gray-700" }, "Run 5+ minutes without errors")
+                      ),
+                      React.createElement('div', { className: "flex items-start space-x-3 md:col-span-2" },
+                        React.createElement('div', { className: "w-2 h-2 bg-yellow-500 rounded-full mt-2" }),
+                        React.createElement('p', { className: "text-gray-700" }, "Maintain stable Wi-Fi connection")
+                      )
+                    )
+                  )
+                )
+              )
+            },
+            {
+              title: "System Overview & Architecture",
+              icon: React.createElement(MapPin, { className: "w-16 h-16 text-red-500" }),
+              content: (
+                React.createElement('div', { className: "space-y-6" },
+                  React.createElement('div', { className: "bg-gradient-to-r from-gray-100 to-gray-200 p-6 rounded-lg" },
+                    React.createElement('h3', { className: "text-2xl font-bold text-gray-800 mb-4 text-center" }, "Component Data Flow"),
+                    
+                    React.createElement('div', { className: "bg-white p-6 rounded-lg shadow-md" },
+                      React.createElement('div', { className: "space-y-4" },
+                        React.createElement('div', { className: "flex items-center justify-between bg-blue-50 p-4 rounded" },
+                          React.createElement('div', { className: "font-bold text-blue-800" }, "Sensors"),
+                          React.createElement('div', { className: "text-sm text-gray-600" }, "LiDAR + IMU + Encoders"),
+                          React.createElement('div', { className: "text-blue-500" }, "→")
+                        ),
+                        
+                        React.createElement('div', { className: "flex items-center justify-between bg-green-50 p-4 rounded" },
+                          React.createElement('div', { className: "font-bold text-green-800" }, "Processing"),
+                          React.createElement('div', { className: "text-sm text-gray-600" }, "SLAM + Localization"),
+                          React.createElement('div', { className: "text-green-500" }, "→")
+                        ),
+                        
+                        React.createElement('div', { className: "flex items-center justify-between bg-purple-50 p-4 rounded" },
+                          React.createElement('div', { className: "font-bold text-purple-800" }, "Control"),
+                          React.createElement('div', { className: "text-sm text-gray-600" }, "Raspberry Pi 4 (Robot)"),
+                          React.createElement('div', { className: "text-purple-500" }, "→")
+                        ),
+                        
+                        React.createElement('div', { className: "flex items-center justify-between bg-orange-50 p-4 rounded" },
+                          React.createElement('div', { className: "font-bold text-orange-800" }, "Actuation"),
+                          React.createElement('div', { className: "text-sm text-gray-600" }, "Motors via OpenCR"),
+                          React.createElement('div', { className: "text-orange-500" }, "✓")
+                        )
+                      )
+                    )
+                  ),
+
+                  React.createElement('div', { className: "grid grid-cols-2 gap-4" },
+                    React.createElement('div', { className: "bg-indigo-50 border-2 border-indigo-300 p-5 rounded-lg" },
+                      React.createElement('h4', { className: "font-bold text-indigo-800 mb-2" }, "Host PC"),
+                      React.createElement('ul', { className: "text-sm space-y-1 text-gray-700" },
+                        React.createElement('li', null, "• SLAM Toolbox"),
+                        React.createElement('li', null, "• Nav2 Stack"),
+                        React.createElement('li', null, "• RViz Visualization")
+                      )
+                    ),
+                    
+                    React.createElement('div', { className: "bg-pink-50 border-2 border-pink-300 p-5 rounded-lg" },
+                      React.createElement('h4', { className: "font-bold text-pink-800 mb-2" }, "User Interface"),
+                      React.createElement('ul', { className: "text-sm space-y-1 text-gray-700" },
+                        React.createElement('li', null, "• Goal selection via RViz"),
+                        React.createElement('li', null, "• Tablet interface option"),
+                        React.createElement('li', null, "• Real-time map display")
+                      )
+                    )
+                  ),
+
+                  React.createElement('div', { className: "bg-gray-800 text-white p-5 rounded-lg" },
+                    React.createElement('h4', { className: "font-bold mb-2" }, "Design Justification"),
+                    React.createElement('p', { className: "text-sm" }, "LiDAR provides accurate indoor mapping • ROS2 enables robust communication • Remote PC handles heavy computation efficiently")
+                  )
+                )
+              )
+            },
+            {
+              title: "Early Design Decisions",
+              icon: React.createElement(Lightbulb, { className: "w-16 h-16 text-yellow-500" }),
+              content: (
+                React.createElement('div', { className: "space-y-5" },
+                  React.createElement('div', { className: "bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-lg" },
+                    React.createElement('h3', { className: "text-2xl font-bold mb-3" }, "Hardware Decisions"),
+                    React.createElement('div', { className: "space-y-2" },
+                      React.createElement('p', null,
+                        React.createElement('strong', null, "LiDAR over Camera:"), " Lighting-independent, 360° scanning capability"
+                      ),
+                      React.createElement('p', null,
+                        React.createElement('strong', null, "TurtleBot3 Burger:"), " Excellent ROS2 support and mobility"
+                      ),
+                      React.createElement('p', null,
+                        React.createElement('strong', null, "Raspberry Pi 4:"), " Handles sensors, offloads SLAM to PC"
+                      )
+                    )
+                  ),
+
+                  React.createElement('div', { className: "bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-lg" },
+                    React.createElement('h3', { className: "text-2xl font-bold mb-3" }, "Software Stack"),
+                    React.createElement('div', { className: "grid grid-cols-2 gap-3" },
+                      React.createElement('div', { className: "bg-white bg-opacity-20 p-3 rounded" },
+                        React.createElement('p', { className: "font-bold" }, "ROS2 Humble"),
+                        React.createElement('p', { className: "text-sm" }, "Communication framework")
+                      ),
+                      React.createElement('div', { className: "bg-white bg-opacity-20 p-3 rounded" },
+                        React.createElement('p', { className: "font-bold" }, "SLAM Toolbox"),
+                        React.createElement('p', { className: "text-sm" }, "Reliable mapping")
+                      ),
+                      React.createElement('div', { className: "bg-white bg-opacity-20 p-3 rounded" },
+                        React.createElement('p', { className: "font-bold" }, "Nav2"),
+                        React.createElement('p', { className: "text-sm" }, "Path planning")
+                      ),
+                      React.createElement('div', { className: "bg-white bg-opacity-20 p-3 rounded" },
+                        React.createElement('p', { className: "font-bold" }, "State Machine"),
+                        React.createElement('p', { className: "text-sm" }, "Mode switching")
+                      )
+                    )
+                  ),
+
+                  React.createElement('div', { className: "bg-red-50 border-2 border-red-300 p-5 rounded-lg" },
+                    React.createElement('h3', { className: "text-xl font-bold text-red-800 mb-3" }, "Rejected Alternatives"),
+                    React.createElement('div', { className: "space-y-2 text-gray-700" },
+                      React.createElement('p', null, "❌ ", React.createElement('strong', null, "Onboard SLAM:"), " Raspberry Pi CPU too limited"),
+                      React.createElement('p', null, "❌ ", React.createElement('strong', null, "Stereo Vision:"), " Calibration complexity"),
+                      React.createElement('p', null, "❌ ", React.createElement('strong', null, "High-Speed Movement:"), " Safety concerns")
+                    )
+                  )
+                )
+              )
+            },
+            {
+              title: "Challenges, Unknowns & Risks",
+              icon: React.createElement(AlertTriangle, { className: "w-16 h-16 text-orange-500" }),
+              content: (
+                React.createElement('div', { className: "space-y-5" },
+                  React.createElement('div', { className: "bg-red-50 border-l-4 border-red-500 p-5 rounded" },
+                    React.createElement('h3', { className: "text-2xl font-bold text-red-800 mb-4" }, "Technical Challenges"),
+                    React.createElement('div', { className: "space-y-3" },
+                      React.createElement('div', { className: "bg-white p-4 rounded shadow" },
+                        React.createElement('p', { className: "font-bold text-gray-800" }, "Wi-Fi Interference"),
+                        React.createElement('p', { className: "text-gray-600 text-sm" }, "Solution: Use dedicated hotspot")
+                      ),
+                      React.createElement('div', { className: "bg-white p-4 rounded shadow" },
+                        React.createElement('p', { className: "font-bold text-gray-800" }, "SLAM Drift"),
+                        React.createElement('p', { className: "text-gray-600 text-sm" }, "Solution: Limit environment size")
+                      ),
+                      React.createElement('div', { className: "bg-white p-4 rounded shadow" },
+                        React.createElement('p', { className: "font-bold text-gray-800" }, "LiDAR Noise"),
+                        React.createElement('p', { className: "text-gray-600 text-sm" }, "Solution: Inflate obstacles (shiny/transparent surfaces)")
+                      )
+                    )
+                  ),
+
+                  React.createElement('div', { className: "bg-yellow-50 border-l-4 border-yellow-500 p-5 rounded" },
+                    React.createElement('h3', { className: "text-2xl font-bold text-yellow-800 mb-4" }, "Human & Environment Factors"),
+                    React.createElement('div', { className: "space-y-3" },
+                      React.createElement('div', { className: "bg-white p-4 rounded shadow" },
+                        React.createElement('p', { className: "font-bold text-gray-800" }, "Rapid User Input"),
+                        React.createElement('p', { className: "text-gray-600 text-sm" }, "Solution: Simple, intuitive UI design")
+                      ),
+                      React.createElement('div', { className: "bg-white p-4 rounded shadow" },
+                        React.createElement('p', { className: "font-bold text-gray-800" }, "Moving People"),
+                        React.createElement('p', { className: "text-gray-600 text-sm" }, "Solution: Conservative speed limits")
+                      ),
+                      React.createElement('div', { className: "bg-white p-4 rounded shadow" },
+                        React.createElement('p', { className: "font-bold text-gray-800" }, "Battery Life"),
+                        React.createElement('p', { className: "text-gray-600 text-sm" }, "Solution: Swap batteries between runs")
+                      )
+                    )
+                  )
+                )
+              )
+            },
+            {
+              title: "Clear Success Criteria",
+              icon: React.createElement(CheckCircle, { className: "w-16 h-16 text-green-500" }),
+              content: (
+                React.createElement('div', { className: "space-y-6" },
+                  React.createElement('div', { className: "bg-gradient-to-r from-green-500 to-emerald-600 text-white p-8 rounded-lg text-center" },
+                    React.createElement('h2', { className: "text-3xl font-bold mb-2" }, "Project Success Metrics"),
+                    React.createElement('p', { className: "text-lg opacity-90" }, "Measurable outcomes for demonstration success")
+                  ),
+
+                  React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
+                    React.createElement('div', { className: "bg-white border-2 border-green-400 p-5 rounded-lg shadow-md" },
+                      React.createElement('div', { className: "flex items-start space-x-3" },
+                        React.createElement('div', { className: "text-green-500 text-2xl" }, "✓"),
+                        React.createElement('div', null,
+                          React.createElement('p', { className: "font-bold text-gray-800" }, "Autonomous Exploration"),
+                          React.createElement('p', { className: "text-gray-600 text-sm" }, "Maps accurately and explores autonomously")
+                        )
+                      )
+                    ),
+
+                    React.createElement('div', { className: "bg-white border-2 border-green-400 p-5 rounded-lg shadow-md" },
+                      React.createElement('div', { className: "flex items-start space-x-3" },
+                        React.createElement('div', { className: "text-green-500 text-2xl" }, "✓"),
+                        React.createElement('div', null,
+                          React.createElement('p', { className: "font-bold text-gray-800" }, "User Navigation"),
+                          React.createElement('p', { className: "text-gray-600 text-sm" }, "Safe and reliable user-selected navigation")
+                        )
+                      )
+                    ),
+
+                    React.createElement('div', { className: "bg-white border-2 border-green-400 p-5 rounded-lg shadow-md" },
+                      React.createElement('div', { className: "flex items-start space-x-3" },
+                        React.createElement('div', { className: "text-green-500 text-2xl" }, "✓"),
+                        React.createElement('div', null,
+                          React.createElement('p', { className: "font-bold text-gray-800" }, "Reliability"),
+                          React.createElement('p', { className: "text-gray-600 text-sm" }, "Both modes run 5+ minutes without failure")
+                        )
+                      )
+                    ),
+
+                    React.createElement('div', { className: "bg-white border-2 border-green-400 p-5 rounded-lg shadow-md" },
+                      React.createElement('div', { className: "flex items-start space-x-3" },
+                        React.createElement('div', { className: "text-green-500 text-2xl" }, "✓"),
+                        React.createElement('div', null,
+                          React.createElement('p', { className: "font-bold text-gray-800" }, "Obstacle Avoidance"),
+                          React.createElement('p', { className: "text-gray-600 text-sm" }, "Avoids obstacles and re-plans when needed")
+                        )
+                      )
+                    ),
+
+                    React.createElement('div', { className: "bg-white border-2 border-green-400 p-5 rounded-lg shadow-md" },
+                      React.createElement('div', { className: "flex items-start space-x-3" },
+                        React.createElement('div', { className: "text-green-500 text-2xl" }, "✓"),
+                        React.createElement('div', null,
+                          React.createElement('p', { className: "font-bold text-gray-800" }, "User Experience"),
+                          React.createElement('p', { className: "text-gray-600 text-sm" }, "Visitors understand without explanation")
+                        )
+                      )
+                    ),
+
+                    React.createElement('div', { className: "bg-white border-2 border-green-400 p-5 rounded-lg shadow-md" },
+                      React.createElement('div', { className: "flex items-start space-x-3" },
+                        React.createElement('div', { className: "text-green-500 text-2xl" }, "✓"),
+                        React.createElement('div', null,
+                          React.createElement('p', { className: "font-bold text-gray-800" }, "Autonomy"),
+                          React.createElement('p', { className: "text-gray-600 text-sm" }, "Minimal operator intervention required")
+                        )
+                      )
+                    )
+                  ),
+
+                  React.createElement('div', { className: "bg-blue-500 text-white p-6 rounded-lg text-center" },
+                    React.createElement('p', { className: "text-xl font-semibold" }, "All criteria must be met for successful demonstration")
+                  )
+                )
+              )
+            }
+          ];
+
+          const nextSlide = () => {
+            if (currentSlide < slides.length - 1) {
+              setCurrentSlide(currentSlide + 1);
+            }
+          };
+
+          const prevSlide = () => {
+            if (currentSlide > 0) {
+              setCurrentSlide(currentSlide - 1);
+            }
+          };
+
+          return (
+            React.createElement('div', { className: "min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8" },
+              React.createElement('div', { className: "max-w-6xl mx-auto" },
+                React.createElement('div', { className: "bg-white rounded-2xl shadow-2xl overflow-hidden" },
+                  React.createElement('div', { className: "bg-gradient-to-r from-blue-600 to-purple-600 p-6 flex items-center justify-between" },
+                    React.createElement('div', { className: "flex items-center space-x-4" },
+                      slides[currentSlide].icon,
+                      React.createElement('h1', { className: "text-3xl font-bold text-white" }, slides[currentSlide].title)
+                    ),
+                    React.createElement('div', { className: "text-white text-lg font-semibold" },
+                      `${currentSlide + 1} / ${slides.length}`
+                    )
+                  ),
+
+                  React.createElement('div', { className: "p-8 min-h-[600px]" },
+                    slides[currentSlide].content
+                  ),
+
+                  React.createElement('div', { className: "bg-gray-100 p-6 flex justify-between items-center" },
+                    React.createElement('button', {
+                      onClick: prevSlide,
+                      disabled: currentSlide === 0,
+                      className: `flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition ${
+                        currentSlide === 0
+                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          : 'bg-blue-500 text-white hover:bg-blue-600'
+                      }`
+                    },
+                      React.createElement(ChevronLeft, { className: "w-5 h-5" }),
+                      React.createElement('span', null, "Previous")
+                    ),
+
+                    React.createElement('div', { className: "flex space-x-2" },
+                      slides.map((_, index) =>
+                        React.createElement('button', {
+                          key: index,
+                          onClick: () => setCurrentSlide(index),
+                          className: `w-3 h-3 rounded-full transition ${
+                            index === currentSlide ? 'bg-blue-500 w-8' : 'bg-gray-400'
+                          }`
+                        })
+                      )
+                    ),
+
+                    React.createElement('button', {
+                      onClick: nextSlide,
+                      disabled: currentSlide === slides.length - 1,
+                      className: `flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition ${
+                        currentSlide === slides.length - 1
+                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          : 'bg-blue-500 text-white hover:bg-blue-600'
+                      }`
+                    },
+                      React.createElement('span', null, "Next"),
+                      React.createElement(ChevronRight, { className: "w-5 h-5" })
+                    )
+                  )
+                )
+              )
+            )
+          );
+        };
+
+        ReactDOM.render(React.createElement(Presentation), document.getElementById('root'));
+    </script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </body>
 </html>
