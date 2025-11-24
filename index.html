@@ -149,7 +149,7 @@
                     <div className="grid lg:grid-cols-2 gap-10 h-full items-center">
                         <div>
                             <span className="text-sm font-mono tracking-widest text-sky-400 border border-sky-600 px-3 py-1 rounded-full mb-4 inline-block">SYSTEM ARCHITECTURE</span>
-                            <h1 className="text-5xl font-extrabold text-white mb-6 leading-tight">Data Integration in Mobile Robotics</h1>
+                            <h1 className="text-5xl font-extrabold text-white mb-6 leading-tight">Data Integration in Autonomous Mapping & User-Directed Navigation Robot</h1>
                             <p className="text-xl text-slate-300">Analysis of the perception and planning pipeline required for SLAM and autonomous navigation.</p>
                             <div className="mt-8 p-6 bg-slate-800/70 border border-slate-700 rounded-xl shadow-xl">
                                 <h3 className="text-xl font-semibold text-sky-400 mb-3">Focus Areas</h3>
@@ -162,7 +162,7 @@
                             </div>
                         </div>
                         <div className="h-full bg-slate-800/50 rounded-xl border border-slate-700 flex items-center justify-center p-8">
-                            <img src="https://placehold.co/400x400/1e293b/a5f3fc?text=TurtleBot3+Model" alt="TurtleBot3 Model" className="rounded-lg opacity-80 shadow-2xl" />
+                            <img src="turtlebot3-burger.jpg" alt="TurtleBot3 Model" className="rounded-lg opacity-80 shadow-2xl" />
                         </div>
                     </div>
                 ),
@@ -209,9 +209,9 @@
                         <div className="mt-8 p-6 bg-slate-800/70 border border-slate-700 rounded-xl">
                             <h3 className="text-xl font-semibold text-sky-400 mb-3 font-mono">Localization Output</h3>
                             <ul className="list-disc list-inside text-slate-300 space-y-1 ml-4">
-                                <li>The SLAM Toolbox continuously updates the **Occupancy Grid Map (`/map`)**.</li>
-                                <li>The global map is used by the **Nav2 Global Planner** for macro pathfinding.</li>
-                                <li>Odometry corrections are fed back to the **State Estimator** for improved ego-motion tracking.</li>
+                                <li>The SLAM Toolbox continuously updates the Occupancy Grid Map (`/map`).</li>
+                                <li>The global map is used by the Nav2 Global Planner for macro pathfinding.</li>
+                                <li>Odometry corrections are fed back to the State Estimator for improved ego-motion tracking.</li>
                             </ul>
                         </div>
                     </div>
@@ -224,22 +224,22 @@
                     <div className="grid lg:grid-cols-2 gap-8 h-full">
                         <div className="space-y-6">
                             <FilterBlock title="LiDAR Filtering (Input Stage)" color="text-sky-400">
-                                <li>**Range Filtering:** Removes invalid readings (e.g., beyond max range or too close).</li>
-                                <li>**Downsampling/Voxelization:** Reduces data volume for faster scan matching in SLAM.</li>
+                                <li>Range Filtering: Removes invalid readings (e.g., beyond max range or too close).</li>
+                                <li>Downsampling/Voxelization: Reduces data volume for faster scan matching in SLAM.</li>
                             </FilterBlock>
                             <FilterBlock title="Odometry Corrections (Fusion)" color="text-emerald-400">
-                                <li>**EKF (Extended Kalman Filter):** Fuses noisy IMU, Odometry, and SLAM data.</li>
-                                <li>**Global Alignment:** SLAM localization provides periodic, global drift correction for the EKF state.</li>
+                                <li>EKF (Extended Kalman Filter): Fuses noisy IMU, Odometry, and SLAM data.</li>
+                                <li>Global Alignment: SLAM localization provides periodic, global drift correction for the EKF state.</li>
                             </FilterBlock>
                         </div>
                         <div className="space-y-6">
                             <FilterBlock title="Costmap Layers (Safety & Planning)" color="text-amber-400">
-                                <li>**Inflation Layer:** Creates safety buffers around obstacles based on robot footprint.</li>
-                                <li>**Voxel Layer:** Handles 3D obstacles (if relevant) and dynamic obstacle tracking.</li>
+                                <li>Inflation Layer: Creates safety buffers around obstacles based on robot footprint.</li>
+                                <li>Voxel Layer: Handles 3D obstacles (if relevant) and dynamic obstacle tracking.</li>
                             </FilterBlock>
                             <FilterBlock title="Behavioral Failures" color="text-red-400">
-                                <li>**Path Obstruction:** Nav2 automatically triggers **Local Replanning** (DWA algorithm).</li>
-                                <li>**Goal Timeout:** A safety timer prevents infinite loops during navigation failures.</li>
+                                <li>Path Obstruction: Nav2 automatically triggers Local Replanning (DWA algorithm).</li>
+                                <li>Goal Timeout: A safety timer prevents infinite loops during navigation failures.</li>
                             </FilterBlock>
                         </div>
                     </div>
@@ -254,14 +254,14 @@
                         <div className="grid grid-cols-2 gap-8 flex-grow">
                             <div className="space-y-4">
                                 <ModeBlock title="Autonomous Exploration Mode (SLAM)" description="Primary objective: Map unknown areas.">
-                                    <li>**Goal Source:** `Nav2` (Behavior Tree: Explore)</li>
-                                    <li>**Output:** Continuous map updates, low-speed movement.</li>
-                                    <li>**Safety:** High inflation radius and low velocity settings.</li>
+                                    <li>Goal Source: Nav2 (Behavior Tree: Explore)</li>
+                                    <li>Output: Continuous map updates, low-speed movement.</li>
+                                    <li>Safety: High inflation radius and low velocity settings.</li>
                                 </ModeBlock>
                                 <ModeBlock title="Interactive Navigation Mode (Goal-Driven)" description="Primary objective: Reach user-defined target." >
-                                    <li>**Goal Source:** User input (RViz 2D Nav Goal)</li>
-                                    <li>**Output:** Optimized trajectory to the target pose.</li>
-                                    <li>**Safety:** Dynamic replanning based on immediate sensor input.</li>
+                                    <li>Goal Source: User input (RViz 2D Nav Goal)</li>
+                                    <li>Output: Optimized trajectory to the target pose.</li>
+                                    <li>Safety: Dynamic replanning based on immediate sensor input.</li>
                                 </ModeBlock>
                             </div>
                             <div className="p-6 bg-slate-800/70 border border-slate-700 rounded-xl flex items-center justify-center">
@@ -306,7 +306,7 @@
                             </table>
                         </div>
                         <div className="mt-8 p-4 bg-red-900/50 border border-red-700 rounded-lg text-red-400 font-mono text-sm shadow-inner">
-                            <span className="text-red-400 font-bold mr-2">[FAILSAFE_PROTOCOL]</span> If localization (`/map` frame) is lost, robot velocity is automatically set to zero on `/cmd_vel`.
+                            <span className="text-red-400 font-bold mr-2">[FAILSAFE_PROTOCOL]</span> If localization (/map frame) is lost, robot velocity is automatically set to zero on /cmd_vel.
                         </div>
                     </div>
                 ),
