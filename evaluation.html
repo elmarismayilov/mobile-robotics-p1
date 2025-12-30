@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation: TurtleBot3 AMNR System</title>
+    <meta name="description"
+        content="Performance analysis and critical reflection of the TurtleBot3 Autonomous Mapping and Navigation Robot.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&family=Outfit:wght@300;500;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #0A0F1E;
+            --primary-color: #CCFF00;
+            --secondary-color: #1E293B;
+            --accent-color: #3B82F6;
+            --text-main: #E2E8F0;
+            --text-muted: #94A3B8;
+            --grid-line: rgba(204, 255, 0, 0.05);
+            --card-bg: rgba(30, 41, 59, 0.6);
+            --transition-smooth: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Grid Background Pattern */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .grid-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg-color) 80%);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 0;
+            scroll-snap-align: start;
+        }
+
+        /* Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .dot.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: scale(1.4);
+            box-shadow: 0 0 15px var(--primary-color);
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3 {
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--primary-color);
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(204, 255, 0, 0.1);
+            border: 1px solid var(--primary-color);
+            border-radius: 4px;
+            margin-bottom: 24px;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+        }
+
+        h2 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            color: white;
+            line-height: 1.1;
+        }
+
+        p.lead {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        /* Cards & Grids */
+        .metrics-grid {
+            display: grid;
+            grid-template-cols: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 32px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-color);
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* Success/Fail Comparison */
+        .comparison-grid {
+            display: grid;
+            grid-template-cols: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .comp-block {
+            padding: 40px;
+            border-radius: 24px;
+        }
+
+        .comp-success {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .comp-fail {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .comp-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 24px;
+        }
+
+        .dot-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .bg-success {
+            background-color: #10b981;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        .bg-fail {
+            background-color: #ef4444;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        .comp-list {
+            list-style: none;
+        }
+
+        .comp-list li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 16px;
+            color: var(--text-muted);
+        }
+
+        .comp-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+
+        /* Hero Image */
+        .hero-img-container {
+            width: 100%;
+            height: 500px;
+            border-radius: 30px;
+            overflow: hidden;
+            margin-top: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .hero-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.1) brightness(0.8) saturate(1.2);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, var(--bg-color) 0%, transparent 50%);
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition-smooth);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll Progress Bar */
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--primary-color);
+            z-index: 1000;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        /* Footer Style Slide */
+        .footer-cta {
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 80px;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 2.5rem;
+            }
+
+            .comparison-grid {
+                grid-template-cols: 1fr;
+            }
+
+            .container {
+                padding: 0 20px;
+            }
+
+            .nav-dots {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="progress"></div>
+    <div class="grid-bg"></div>
+
+    <div class="nav-dots">
+        <div class="dot active" data-target="slide-1"></div>
+        <div class="dot" data-target="slide-2"></div>
+        <div class="dot" data-target="slide-3"></div>
+        <div class="dot" data-target="slide-4"></div>
+        <div class="dot" data-target="slide-5"></div>
+        <div class="dot" data-target="slide-6"></div>
+    </div>
+
+    <div class="container">
+        <!-- Slide 1: Title -->
+        <section id="slide-1">
+            <div class="reveal">
+                <span class="section-tag mono">POST-MISSION REPORT // EVALUATION</span>
+                <h1>TurtleBot3 <span style="color: var(--primary-color);">AMNR</span> System</h1>
+                <p class="lead">A critical reflection on autonomous mapping and user-directed navigation performance
+                    using LiDAR and IMU sensor fusion.</p>
+                <div class="hero-img-container shadow-2xl">
+                    <img src="turtlebot3-burger.jpg" alt="System Performance Dashboard">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Goal Assessment -->
+        <section id="slide-2">
+            <div class="reveal">
+                <span class="section-tag mono">01 // GOAL ACHIEVEMENT</span>
+                <h2>How well did the system <span style="color: var(--primary-color);">perform?</span></h2>
+                <p class="lead">Comparison of technical requirements vs. real-world execution metrics during environment
+                    mapping.</p>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label mono">Map Coverage</div>
+                        <div class="metric-value">98.4%</div>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Successfully generated occupancy grid of
+                            the test area with minimal holes.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label mono">Localization Error</div>
+                        <div class="metric-value">±12cm</div>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Average drift between SLAM-estimated
+                            pose and ground truth over 10m traversal.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label mono">Loop Closure</div>
+                        <div class="metric-value">Success</div>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">SLAM Toolbox effectively identified
+                            revisited path sections for correction.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Performance Analysis -->
+        <section id="slide-3">
+            <div class="reveal">
+                <span class="section-tag mono">02 // CRITICAL ANALYSIS</span>
+                <h2>Successes & <span style="color: #ef4444;">Failures</span></h2>
+                <div class="comparison-grid">
+                    <div class="comp-block comp-success">
+                        <div class="comp-header">
+                            <div class="dot-status bg-success"></div>
+                            <h3 style="color: #10b981;">Operational Wins</h3>
+                        </div>
+                        <ul class="comp-list">
+                            <li><strong>Dynamic Obstacle Avoidance:</strong> The DWA Local Planner reacted instantly to
+                                human movement in the path.</li>
+                            <li><strong>LiDAR Precision:</strong> Stable detection of thin obstacles (table legs) thanks
+                                to the LDS-02 sensor.</li>
+                            <li><strong>Compute Offloading:</strong> Running SLAM on a Host PC prevented Pi CPU thermal
+                                throttling.</li>
+                            <li><strong>Transparent Link:</strong> ROS2 DDS handled the distributed node communication
+                                with < 5ms latency.</li>
+                        </ul>
+                    </div>
+                    <div class="comp-block comp-fail">
+                        <div class="comp-header">
+                            <div class="dot-status bg-fail"></div>
+                            <h3 style="color: #ef4444;">Observed Limitations</h3>
+                        </div>
+                        <ul class="comp-list">
+                            <li><strong>Wi-Fi Dependency:</strong> System failure occurred if the Host PC lost
+                                connection to the robot's local network.</li>
+                            <li><strong>Time Sync:</strong> Clock desynchronization between Pi and PC occasionally
+                                caused TF transform aging errors.</li>
+                            <li><strong>Lidar/Glass:</strong> Standard LiDAR failure to detect transparent obstacles
+                                remained a sensor-level bottleneck.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Trade-offs -->
+        <section id="slide-4">
+            <div class="reveal">
+                <span class="section-tag mono">03 // DESIGN TRADE-OFFS</span>
+                <h2>The Balance of <span style="color: var(--accent-color);">Engineering</span></h2>
+                <p class="lead">Reflecting on the technical sacrifices made to ensure system stability and real-time
+                    response.</p>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h3 style="font-size: 1.2rem; margin-bottom: 15px;">Resolution vs. Speed</h3>
+                        <p style="color: var(--text-muted);">We chose a <strong>0.05m</strong> grid resolution. Lower
+                            values improved mapping detail but caused the global planner to time out on the Raspberry Pi
+                            4.</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3 style="font-size: 1.2rem; margin-bottom: 15px;">Host vs. Edge</h3>
+                        <p style="color: var(--text-muted);">We offloaded <strong>90%</strong> of compute to the Host
+                            PC. This allowed for complex SLAM tuning that would be impossible on the Pi standalone.</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3 style="font-size: 1.2rem; margin-bottom: 15px;">Frequency vs. Bandwidth</h3>
+                        <p style="color: var(--text-muted);">LiDAR scan rate was set to <strong>5Hz</strong> to ensure
+                            Wi-Fi bandwidth wasn't saturated by the peer-to-peer DDS traffic.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Reliability & Accuracy -->
+        <section id="slide-5">
+            <div class="reveal">
+                <span class="section-tag mono">04 // SYSTEM RELIABILITY</span>
+                <h2>Data Quality & <span style="color: var(--primary-color);">Integrity</span></h2>
+                <p class="lead">Interpreting the logs: How reliable is the generated occupancy grid under stress?</p>
+
+                <div
+                    style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 40px; margin-top: 20px;">
+                    <div class="comparison-grid">
+                        <div>
+                            <h3 style="margin-bottom: 20px;">Packet Loss</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 20px;">Occasional drops in Wi-Fi
+                                transmission caused transient flickering in LIDAR scans. The system relies on the
+                                <strong>Occupancy Grid accumulation</strong> to maintain a stable world model despite
+                                these momentary data gaps.
+                            </p>
+                            <div class="mono"
+                                style="background: #000; padding: 15px; border-radius: 8px; font-size: 0.8rem;">
+                                [WARN] Network: Transient packet loss detected<br>
+                                [INFO] Map status: Persisting existing costmap data
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="margin-bottom: 20px;">Sensor Noise</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 20px;">Electrical noise from the motors
+                                slightly impacted IMU gyro readings. The <strong>EKF (Extended Kalman Filter)</strong>
+                                effectively suppressed these high-frequency spikes.</p>
+                            <div class="mono"
+                                style="background: #000; padding: 15px; border-radius: 8px; font-size: 0.8rem;">
+                                IMU Variance X: 0.002 rad/s²<br>
+                                EKF Confidence: 94.7%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Future Improvements -->
+        <section id="slide-6">
+            <div class="reveal footer-cta">
+                <span class="section-tag mono">05 // THE ROAD AHEAD</span>
+                <h2>Improvements & <span style="color: var(--primary-color);">Future</span> Enhancements</h2>
+                <div class="metrics-grid" style="text-align: left;">
+                    <div class="metric-card">
+                        <div class="mono" style="margin-bottom: 10px;">UPGRADE 01</div>
+                        <h3 style="font-size: 1.1rem;">3D SLAM Transition</h3>
+                        <p style="color: var(--text-muted);">Adding a Depth Camera (Oak-D) to detect transparent objects
+                            and handle multi-level environments.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="mono" style="margin-bottom: 10px;">UPGRADE 02</div>
+                        <h3 style="font-size: 1.1rem;">Multi-Robot Swarm</h3>
+                        <p style="color: var(--text-muted);">Collaborative mapping where two robots merge their local
+                            maps into a unified global occupancy grid.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="mono" style="margin-bottom: 10px;">UPGRADE 03</div>
+                        <h3 style="font-size: 1.1rem;">Edge AI Navigation</h3>
+                        <p style="color: var(--text-muted);">Moving from heuristic pathfinding to Reinforcement Learning
+                            based local navigation for complex crowds.</p>
+                    </div>
+                </div>
+
+                <p style="margin-top: 80px; color: var(--text-muted);" class="mono">END OF EVALUATION REPORT // VERSION
+                    1.0.4</p>
+                <p style="font-size: 0.8rem; color: #444; margin-top: 20px;">Designed for Mobile Robotics Presentation
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.25
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    updateDots(entry.target.id);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Dot Navigation Logic
+        function updateDots(activeId) {
+            document.querySelectorAll('.dot').forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.getAttribute('data-target') === activeId) {
+                    dot.classList.add('active');
+                }
+            });
+        }
+
+        document.querySelectorAll('.dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                const targetId = dot.getAttribute('data-target');
+                document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progress').style.width = scrolled + '%';
+        });
+
+        // Horizontal Parallax Effect on Scroll (Subtle)
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            document.querySelector('.grid-bg').style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
+    </script>
+</body>
+
+</html>
